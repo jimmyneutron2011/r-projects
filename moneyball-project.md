@@ -18,7 +18,7 @@ print((head(batting)))
 
 
 
-#Using str() to check the structure
+**#Using str() to check the structure**
 
 print(str(batting))
 
@@ -26,7 +26,7 @@ print(str(batting))
 
 
 
-#Calling the head() of the AB (At Bats) column
+**#Calling the head() of the AB (At Bats) column**
 
 print(head(batting$AB))
 
@@ -34,7 +34,7 @@ print(head(batting$AB))
 
 
 
-#Calling the head of the doubles (X2B) column
+**#Calling the head of the doubles (X2B) column**
 
 print(head(batting$X2B))
 
@@ -44,7 +44,7 @@ print(head(batting$X2B))
 
 **FEATURE ENGINEERING**
 
-#Creating a new column called BA and adding it to the batting data frame
+**#Creating a new column called BA and adding it to the batting data frame**
 
 batting$BA <- batting$H / batting$AB
 
@@ -54,7 +54,7 @@ print(tail(batting$BA,5))
 
 
 
-#Creating a new column called OBP (On Base Percentage) and adding it to the batting data frame
+**#Creating a new column called OBP (On Base Percentage) and adding it to the batting data frame**
 
 batting$OBP <- (batting$H + batting$BB + batting$HBP) / (batting$AB + batting$BB + batting$HBP + batting$SF)
 
@@ -64,7 +64,7 @@ print(tail(batting$OBP, 5))
 
 
 
-#Creating a new column called SLG (Slugging Percentage) and adding it to the batting data frame
+**#Creating a new column called SLG (Slugging Percentage) and adding it to the batting data frame**
 
 batting$X1B <- batting$H - batting$X2B - batting$X3B - batting$HR
 
@@ -80,7 +80,7 @@ print(tail(batting$SLG, 5))
 
 sal <- read.csv('Salaries.csv')
 
-#Using summary to get a summary of the batting data frame
+**#Using summary to get a summary of the batting data frame**
 
 print(summary(batting))
 
@@ -88,15 +88,15 @@ print(summary(batting))
 
 
 
-#Notice the minimum year in the yearID column. Our batting data goes back to 1871 and our salary data starts at 1985
+**#Notice the minimum year in the yearID column. Our batting data goes back to 1871 and our salary data starts at 1985**
 
-#We need to remove the batting data that occured before 1985.
+**#We need to remove the batting data that occured before 1985**
 
 batting <- subset(batting, yearID >= 1985)
 
 
 
-#Using summary again to make sure the subset reassignment worked
+**#Using summary again to make sure the subset reassignment worked**
 
 print(summary(batting))
 
@@ -104,11 +104,11 @@ print(summary(batting))
 
 
 
-#Using the merge() function to merge the batting and sal data frames by c('playerID','yearID') and calling the new data frame combo
+**#Using the merge() function to merge the batting and sal data frames by c('playerID','yearID') and calling the new data frame combo**
 
 combo <- merge(batting, sal, by = c('playerID', 'yearID'))
 
-#Using summary to check the data
+**#Using summary to check the data**
 
 print(summary(combo))
 
@@ -116,7 +116,7 @@ print(summary(combo))
 
 **ANALYZING THE LOST PLAYERS**
 
-#Using the subset() function to get a data frame called lost_players from the combo data frame consisting of those 3 lost players
+**#Using the subset() function to get a data frame called lost_players from the combo data frame consisting of those 3 lost players**
 
 lost_players <- subset(combo, playerID %in% c('giambja01', 'damonjo01', 'saenzol01'))
 
@@ -126,13 +126,13 @@ print(lost_players)
 
 
 
-#Since all these players were lost in after 2001 in the offseason, let's only concern ourselves with the data from 2001
+**#Since all these players were lost in after 2001 in the offseason, let's only concern ourselves with the data from 2001**
 
-#Using subset again to only grab the rows where the yearID was 2001
+**#Using subset again to only grab the rows where the yearID was 2001**
 
 lost_players <- subset(lost_players, yearID == 2001)
 
-#Reducing the lost_players data frame to the following columns:playerID, H, X2B, X3B, HR, OBP, SLG, BA, AB
+**#Reducing the lost_players data frame to the following columns:playerID, H, X2B, X3B, HR, OBP, SLG, BA, AB**
 
 lost_players <- subset(lost_players, select = c(playerID, H, X2B, X3B, HR, OBP, SLG, BA, AB))
 
@@ -144,15 +144,15 @@ print(head(lost_players))
 
 **REPLACEMENT PLAYERS**
 
-#We have three constraints:
+**#We have three constraints:**
 
-#The total combined salary of the three players can not exceed 15 million dollars
+**#The total combined salary of the three players can not exceed 15 million dollars**
 
-#Their combined number of At Bats (AB) needs to be equal to or greater than the lost players -> Sum(AB) >= 1469
+**#Their combined number of At Bats (AB) needs to be equal to or greater than the lost players -> Sum(AB) >= 1469**
 
-#Their mean OBP had to equal to or greater than the mean OBP of the lost players -> Mean(OBP) >= 0.3638687
+**#Their mean OBP had to equal to or greater than the mean OBP of the lost players -> Mean(OBP) >= 0.3638687**
 
-#Using subset() function to find players based on the above criteria
+**#Using subset() function to find players based on the above criteria**
 
 combo <- subset(combo, yearID==2001 & salary <= (1500000/3) & AB >= (1469/3) & OBP >= 0.3638687)
 
@@ -162,7 +162,7 @@ print(combo)
 
 
 
-#Visualizing the data frame based on the above criteria
+**#Visualizing the data frame based on the above criteria**
 
 pl <- ggplot(combo, aes(x=AB,y=OBP,color=factor(salary), label=playerID)) + geom_point(shape=1, size=5)
 

@@ -1,21 +1,16 @@
 library(ggplot2)
 
-library(data.table)
-
 library(ggthemes)
 
-df <-
-  fread(
-    "E:\\R-Course-HTML-Notes\\R-Course-HTML-Notes\\R-for-Data-Science-and-Machine-Learning\\Training Exercises\\Capstone and Data Viz Projects\\Data Visualization Project\\Economist_Assignment_Data.csv"
-  )
-
+df <- read.csv('Economist_Assignment_Data.csv')
 
 print(head(df))
 
 ![data-viz-1](https://user-images.githubusercontent.com/97744709/210115869-9a143963-30d9-4fd5-bf59-0020522755f5.jpg)
 
 
-#Creating a scatter plot with geom_point()
+
+**#Creating a scatter plot with geom_point()**
 
 pl <- ggplot(df, aes(x = CPI, y = HDI)) + geom_point(aes(color = Region))
 
@@ -25,131 +20,63 @@ print(pl)
 
 
 
+**#Changing the points to be larger empty circles**
 
-# pl <-
-#   ggplot(df, aes(x = CPI, y = HDI)) + geom_point(shape = 1, size = 5, aes(color =
-#                                                                             Region))
-##Change the points to be larger empty circles.
-##(
-##  You'll have to go back and add arguments to geom_point() and reassign it to pl.)
-##You'll need to figure out what shape = and size =
+pl1 <- ggplot(df, aes(x = CPI, y = HDI)) + geom_point(shape = 1, size = 5, aes(color = Region))
 
+print(pl1)
 
-# pl <-
-#   ggplot(df, aes(x = CPI, y = HDI)) + geom_point(shape = 1, size = 5, aes(color =
-#                                                                             Region)) + geom_smooth(aes(group = 1))
-##Add geom_smooth(aes(group = 1)) to add a trend line
+![data-viz-3](https://user-images.githubusercontent.com/97744709/210134956-61a39738-418a-4fa7-af03-9094fde7999f.jpg)
 
 
-# pl <-
-#   ggplot(df, aes(x = CPI, y = HDI)) + geom_point(shape = 1, size = 5, aes(color =
-#                                                                             Region)) + geom_smooth(
-#                                                                               aes(group = 1),
-#                                                                               method = 'lm',
-#                                                                               formula = y ~ log(x),
-#                                                                               se = FALSE,
-#                                                                               color = 'red'
-#                                                                             )
-##We want to further edit this trend line.
-##Add the following arguments to geom_smooth (outside of aes):method = 'lm' formula = y ~ log(x) se = FALSE color = 'red'
+
+**#Adding geom_smooth(aes(group = 1)) to add a trend line**
+
+pl2 <- pl1 + geom_smooth(aes(group = 1))
+
+print(pl2)
+
+![data-viz-4](https://user-images.githubusercontent.com/97744709/210135021-70d42e91-5f9b-46d3-bc42-a1e099985935.jpg)
 
 
-# pl <-
-#   ggplot(df, aes(x = CPI, y = HDI)) + geom_point(shape = 1, size = 5, aes(color =
-#                                                                             Region)) + geom_smooth(
-#                                                                               aes(group = 1),
-#                                                                               method = 'lm',
-#                                                                               formula = y ~ log(x),
-#                                                                               se = FALSE,
-#                                                                               color = 'red'
-#                                                                             ) + geom_text(aes(label = Country, color = Region))
-##It's really starting to look similar! But we still need to add labels, we can use geom_text!
-##Add geom_text(aes(label=Country)) to pl2 and see what happens.
-##(Hint: It should be way too many labels)
 
 
-pl <-
-  ggplot(df, aes(x = CPI, y = HDI)) + geom_point(shape = 1, size = 5, aes(color =
-                                                                            Region)) + geom_smooth(
-                                                                              aes(group = 1),
-                                                                              method = 'lm',
-                                                                              formula = y ~ log(x),
-                                                                              se = FALSE,
-                                                                              color = 'red'
-                                                                            )
+**##Further editing this trend line**
 
-pointsToLabel <-
-  c(
-    "Russia",
-    "Venezuela",
-    "Iraq",
-    "Myanmar",
-    "Sudan",
-    "Afghanistan",
-    "Congo",
-    "Greece",
-    "Argentina",
-    "Brazil",
-    "India",
-    "Italy",
-    "China",
-    "South Africa",
-    "Spane",
-    "Botswana",
-    "Cape Verde",
-    "Bhutan",
-    "Rwanda",
-    "France",
-    "United States",
-    "Germany",
-    "Britain",
-    "Barbados",
-    "Norway",
-    "Japan",
-    "New Zealand",
-    "Singapore"
-  )
+pl2 <- pl1 + geom_smooth(aes(group = 1), method = 'lm', formula = y ~ log(x), se = FALSE, color = 'red')
 
-pl2 <- pl + geom_text(
-  aes(label = Country),
-  color = "gray20",
-  data = subset(df, Country %in% pointsToLabel),
-  check_overlap = TRUE
-)
-##Labeling a subset is actually pretty tricky ! So we're just going to give you the answer since it would require manually selecting the subset of countries we want to label!
+print(pl2)
+
+![data-viz-5](https://user-images.githubusercontent.com/97744709/210135108-e8c1d12d-247b-4a81-86bc-8e96724483a9.jpg)
 
 
-# pl3 <- pl2 + theme_bw()
-##Almost there ! Still not perfect, but good enough for this assignment.
-##Later on we'll see why interactive plots are better for labeling.
-##Now let's just add some labels and a theme, set the x and y scales and we're done!
-##Add theme_bw() to your plot and save this to pl4
 
+**#Adding labels using geom_text**
 
-# pl3 <-
-#   pl2 + theme_bw() + scale_x_continuous(name = "Corruption Perception Index, 2011 (10 = least corrupt)",
-#                                         limits = c(1, 10),
-#                                         breaks = 1:10)
-##Add scale_x_continuous() and set the following arguments:name = Same x axis as the Economist Plot
-##limits = Pass a vector of appropriate x limits
-##breaks = 1:10
+pointsToLabel <-c("Russia", "Venezuela", "Iraq", "Myanmar", "Sudan", "Afghanistan", "Congo", "Greece", "Argentina", "Brazil", "India", "Italy", "China", "South Africa", "Spain", "Botswana", "Cape Verde", "Bhutan", "Rwanda", "France", "United States", "Germany", "Britain", "Barbados", "Norway", "Japan", "New Zealand", "Singapore")
 
-
-# pl3 <-
-#   pl2 + theme_bw() + scale_x_continuous(name = "Corruption Perception Index, 2011 (10 = least corrupt)",
-#                                         limits = c(1, 10),
-#                                         breaks = 1:10) + scale_y_continuous(name = "Human Development Index, 2011 (1 = best)", limits =
-#                                                                               c(0.2, 1))
-##Now use scale_y_continuous to do similar operations to the y axis!
-
-
-pl3 <-
-  pl2 + theme_bw() + scale_x_continuous(name = "Corruption Perception Index, 2011 (10 = least corrupt)",
-                                        limits = c(1, 10),
-                                        breaks = 1:10) + scale_y_continuous(name = "Human Development Index, 2011 (1 = best)", limits =
-                                                                              c(0.2, 1)) + ggtitle("Corruption and Human Development") + theme(plot.title = element_text(hjust =
-                                                                                                                                                                           0.5))
-##Finally use ggtitle() to add a string as a title.
-
+pl3 <- pl2 + geom_text(aes(label = Country), color = "gray20", data = subset(df, Country %in% pointsToLabel), check_overlap = TRUE)
 
 print(pl3)
+
+![data-viz-7](https://user-images.githubusercontent.com/97744709/210135569-6b6279cf-598d-4289-a8d6-a7ccefb71b44.jpg)
+
+
+
+**#Adding theme_bw(), scale_x_continuous() and scale_y_continuous**
+
+pl4 <- pl3 + theme_bw() + scale_x_continuous(name = "Corruption Perception Index, 2011 (10 = least corrupt)", limits = c(1, 10), breaks = 1:10) + scale_y_continuous(name = "Human Development Index, 2011 (1 = best)", limits =c(0.2, 1))
+
+print(pl4)
+
+![data-viz-9](https://user-images.githubusercontent.com/97744709/210135972-35d70913-73f0-460f-8542-865cb1f0c1c7.jpg)
+
+
+
+**#Finally using ggtitle() to add a string as a title**
+
+pl5 <- pl4 + ggtitle("Corruption and Human Development") + theme(plot.title = element_text(hjust = 0.5))
+
+print(pl5)
+
+![data-viz-10](https://user-images.githubusercontent.com/97744709/210136062-45f2915a-126e-4d08-a9c1-c680515a4d80.jpg)
